@@ -1,0 +1,31 @@
+#开发配置
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://172.16.191.128:3306/pep-iot
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    continue-on-error: true
+
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  check-config-location: true
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    lazy-loading-enabled: true
+    cache-enabled: true
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
+
+pep:
+  emq:
+    username: admin
+    password: public
+    http-url: http://172.16.191.128:18083
+    client-auth-url: /api/v4/auth_clientid
+    keepAlive: 60
+    mqtt:
+      # mqtt://
+      mqttUrl: 172.16.191.128
+      port: 1883

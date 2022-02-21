@@ -1,1 +1,16 @@
+spring:
+  application:
+    name: pep-iot
+  profiles:
+    active: ${env:dev}
+server:
+  port: 7200
+  servlet:
+    context-path: /pep
+
+logging:
+  #  config: classpath:logback-spring.xml
+  level:
+    root: info
+#    org.springframework.jdbc.datasource.DataSourceTransactionManager: debug
 
