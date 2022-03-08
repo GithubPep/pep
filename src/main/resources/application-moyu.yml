@@ -1,0 +1,21 @@
+#开发配置
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3366/pep-iot
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    continue-on-error: true
+
+pep:
+  emq:
+    username: admin
+    password: public
+    http-url: http://172.16.191.128:18083
+    client-auth-url: /api/v4/auth_clientid
+    keepAlive: 60
+    mqtt:
+      # mqtt://
+      mqttUrl: 172.16.191.128
+      port: 1883

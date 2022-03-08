@@ -2,6 +2,7 @@ package com.example.pep.iot.emq.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pep.iot.emq.config.EmqAuthConfig;
 import com.example.pep.iot.exception.BizException;
 import lombok.RequiredArgsConstructor;

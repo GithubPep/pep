@@ -1,6 +1,10 @@
 package com.example.pep.iot.emq.service;
 
 import cn.hutool.core.lang.id.NanoId;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.example.pep.iot.business.account.dto.AppCountDto;
+import com.example.pep.iot.business.account.service.AccountService;
 import com.example.pep.iot.emq.config.EmqAuthConfig;
 import com.example.pep.iot.emq.config.EmqMqttConfig;
 import com.example.pep.iot.emq.consistent.TopicEnum;
@@ -43,6 +47,9 @@ public class DeviceRegisterService {
 
     private final EmqAuthConfig emqAuthConfig;
 
+    private final AccountService accountService;
+
+
     private final ExpiringMap<String, AuthData> authDataCache = ExpiringMap.builder()
             .maxSize(128)
             .expiration(5 * 60, TimeUnit.SECONDS)
@@ -74,10 +81,12 @@ public class DeviceRegisterService {
         connection.setPassword(authData.getPassword());
         response.setDeviceMQTTConnection(connection);
 
-        // MQTT topics information TODO 为每个品牌构建appKey,目前使用brand
+        // MQTT topics information
+        AppCountDto appCountDto = accountService.getAppAccountByDeviceCode(brandCode);
+        String ak = appCountDto.getAppKey();
         DeviceMQTTTopics deviceMQTTTopics = new DeviceMQTTTopics();
-        List<String> pubTopics = buildPubTopics(brandCode, clientId);
-        List<String> subTopics = buildSubTopics(brandCode, clientId);
+        List<String> pubTopics = buildPubTopics(ak, clientId);
+        List<String> subTopics = buildSubTopics(ak, clientId);
         deviceMQTTTopics
                 .setPubTopics(pubTopics)
                 .setSubTopics(subTopics);
@@ -93,7 +102,9 @@ public class DeviceRegisterService {
         AuthData authData = authDataCache.get(cacheKey);
         if (Objects.isNull(authData)) {
             // from db get
-            EmqClientAuth clientAuth = emqClientAuthMapper.selectOneByDeviceCode(deviceCode);
+            LambdaQueryWrapper<EmqClientAuth> queryWrapper = Wrappers.lambdaQuery(EmqClientAuth.class);
+            queryWrapper.eq(EmqClientAuth::getDeviceCode, deviceCode);
+            EmqClientAuth clientAuth = emqClientAuthMapper.selectOne(queryWrapper);
             if (Objects.isNull(clientAuth)) {
                 //create clientId
                 String clientId = "pep_" + deviceCode + "_" + NanoId.randomNanoId(6);
@@ -125,18 +136,18 @@ public class DeviceRegisterService {
     /**
      * 构建pub topic
      */
-    private List<String> buildPubTopics(String brandCode, String clientId) {
+    private List<String> buildPubTopics(String appKey, String clientId) {
         List<String> pubTopics = new ArrayList<>();
-        pubTopics.add(TopicEnum.getTopicExact(TopicEnum.DEVICE_PUB_TOPIC, brandCode, clientId));
+        pubTopics.add(TopicEnum.getTopicExact(TopicEnum.DEVICE_PUB_TOPIC, appKey, clientId));
         return pubTopics;
     }
 
     /**
      * 构建sub topic
      */
-    private List<String> buildSubTopics(String brandCode, String clientId) {
+    private List<String> buildSubTopics(String appKey, String clientId) {
         List<String> subTopics = new ArrayList<>();
-        subTopics.add(TopicEnum.getTopicExact(TopicEnum.DEVICE_SUB_TOPIC, brandCode, clientId));
+        subTopics.add(TopicEnum.getTopicExact(TopicEnum.DEVICE_SUB_TOPIC, appKey, clientId));
         return subTopics;
     }
 
@@ -155,7 +166,9 @@ public class DeviceRegisterService {
         AuthData authData = authDataCache.get(cacheKey);
         if (Objects.isNull(authData)) {
             // from db get
-            EmqClientAuth clientAuth = emqClientAuthMapper.selectOneByDeviceCode(deviceCode);
+            LambdaQueryWrapper<EmqClientAuth> queryWrapper = Wrappers.lambdaQuery(EmqClientAuth.class);
+            queryWrapper.eq(EmqClientAuth::getDeviceCode, deviceCode);
+            EmqClientAuth clientAuth = emqClientAuthMapper.selectOne(queryWrapper);
             if (Objects.isNull(clientAuth)) {
                 return null;
             }

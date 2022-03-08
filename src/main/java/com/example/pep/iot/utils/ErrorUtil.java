@@ -42,7 +42,7 @@ public class ErrorUtil {
      */
     private static Method getPrintMethod() {
         try {
-            return Throwable.class.getMethod("print" + "Stack" + "Trace", PrintWriter.class);
+            return Throwable.class.getMethod("printStackTrace", PrintWriter.class);
         } catch (NoSuchMethodException e) {
             return null;
         }

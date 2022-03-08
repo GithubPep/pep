@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     public ResultVO<String> bizExceptionHandler(HttpServletRequest req, BizException e) {
         String errorData = String.format("%s模块发生业务异常,接口名:%s,异常原因:%s", name, req.getContextPath() + req.getServletPath(), ErrorUtil.getExceptionStackPrint(e));
         log.error("{}", errorData);
-        return ResultVO.ok(e.getCode(), e.getMessage(), errorData);
+        return ResultVO.err(e.getCode(), e.getMessage(), errorData);
     }
 
     /**

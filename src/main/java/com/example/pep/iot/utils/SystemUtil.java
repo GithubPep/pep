@@ -46,9 +46,7 @@ public class SystemUtil {
                         for (byte b : mac) {
                             sb.append(String.format("%02X%s", b, ""));
                         }
-                        if (sb.length() > 0) {
-                            return sb.toString();
-                        }
+                        return sb.toString();
                     }
                 }
             }

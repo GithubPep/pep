@@ -25,7 +25,7 @@ public enum TopicEnum {
         return MessageFormat.format(topicEnum.getTopic(), brandCode, clientId);
     }
 
-    public static String getEdgeLinkTopicExact(TopicEnum topicEnum, String key) {
-        return MessageFormat.format(topicEnum.getTopic(), key);
+    public String getTopic() {
+        return this.topic;
     }
-    }
+}

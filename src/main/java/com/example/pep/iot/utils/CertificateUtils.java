@@ -39,7 +39,7 @@ public class CertificateUtils {
         return sign;
     }
 
-    public static String getStringSignTemp(HashMap<String, String> params, String accessKey, String secretKey, String timestamp) {
+    private static String getStringSignTemp(HashMap<String, String> params, String accessKey, String secretKey, String timestamp) {
         HashMap<String, String> newRequestParams = removeEmptyParam(params);
         newRequestParams.put("AccessKey", accessKey);
         newRequestParams.put("Timestamp", timestamp);
