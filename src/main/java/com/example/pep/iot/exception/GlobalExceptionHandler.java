@@ -89,6 +89,6 @@ public class GlobalExceptionHandler {
         }
         log.error("未知异常！原因是:{}", e.getMessage(), e);
         String errorData = String.format("%s模块发生未知异常,接口名:%s,异常原因:%s", name, req.getContextPath() + req.getServletPath(), ErrorUtil.getExceptionStackPrint(e));
-        return ResultVO.err(ResultEnum.SERVER_ERROR.getCode(), ResultEnum.SERVER_ERROR.getMessage(), errorData);
+        return ResultVO.err(ResultEnum.FAILED.getCode(), ResultEnum.FAILED.getMessage(), errorData);
     }
 }

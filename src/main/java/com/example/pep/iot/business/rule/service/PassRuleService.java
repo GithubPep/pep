@@ -2,6 +2,8 @@ package com.example.pep.iot.business.rule.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pep.iot.business.rule.entity.PassRule;
 import com.example.pep.iot.business.rule.entity.RuleDeviceSummary;
@@ -19,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +45,7 @@ public class PassRuleService extends ServiceImpl<PassRuleMapper, PassRule> {
     private final RuleTimeService ruleTimeService;
 
     /**
-     * 添加rule
+     * 添加rule todo 完善分组
      */
     @Transactional(rollbackFor = Exception.class)
     public void addRule(RuleReq ruleReq) {
@@ -49,10 +53,11 @@ public class PassRuleService extends ServiceImpl<PassRuleMapper, PassRule> {
         String recognizeType = String.join(",", ruleReq.getRecognizeTypes());
         passRule.setRecognizeType(recognizeType);
         passRule.setPublishTime(LocalDateTime.now());
-        this.save(passRule);
         if (!CollectionUtils.isEmpty(ruleReq.getRulePersons())) {
             //按照人员下发
             passRule.setUserCount(ruleReq.getRulePersons().size());
+            passRule.setRuleType(0);
+            this.save(passRule);
             List<RulePersonSummary> rulePersonSummaries = batchInsertPerson(passRule.getId(), ruleReq.getRulePersons());
             rulePersonService.saveBatch(rulePersonSummaries);
         }
@@ -86,16 +91,56 @@ public class PassRuleService extends ServiceImpl<PassRuleMapper, PassRule> {
     }
 
     List<RuleDeviceSummary> getRuleDeviceSummaryByRuleId(String ruleId) {
-        return ruleDeviceService.listByIds(Collections.singletonList(ruleId));
+        LambdaQueryWrapper<RuleDeviceSummary> ruleDeviceSummaryQueryWrapper = Wrappers.lambdaQuery(RuleDeviceSummary.class);
+        ruleDeviceSummaryQueryWrapper.eq(RuleDeviceSummary::getRuleId, ruleId);
+        return ruleDeviceService.list(ruleDeviceSummaryQueryWrapper);
     }
 
     List<RulePersonSummary> getRulePersonSummaryByRuleId(String ruleId) {
-        return rulePersonService.listByIds(Collections.singletonList(ruleId));
+        LambdaQueryWrapper<RulePersonSummary> rulePersonSummaryQueryWrapper = Wrappers.lambdaQuery(RulePersonSummary.class);
+        rulePersonSummaryQueryWrapper.eq(RulePersonSummary::getRuleId, ruleId);
+        return rulePersonService.list(rulePersonSummaryQueryWrapper);
     }
 
     List<RuleTimeSummary> getRuleTimeSummary(String ruleId) {
-        return ruleTimeService.listByIds(Collections.singletonList(ruleId));
+        LambdaQueryWrapper<RuleTimeSummary> ruleTimeSummaryQueryWrapper = Wrappers.lambdaQuery(RuleTimeSummary.class);
+        ruleTimeSummaryQueryWrapper.eq(RuleTimeSummary::getRuleId, ruleId);
+        return ruleTimeService.list(ruleTimeSummaryQueryWrapper);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void delRule(List<String> ids) {
+        this.removeBatchByIds(ids);
+        this.ruleDeviceService.removeBatchByIds(ids);
+        this.ruleTimeService.removeBatchByIds(ids);
+        this.rulePersonService.removeBatchByIds(ids);
+    }
 
+    /**
+     * 查询规则细节
+     *
+     * @param id 规则id
+     * @return 规则详细信息
+     */
+    public RuleReq queryRuleDetail(String id) {
+        PassRule passRule = this.getById(id);
+        RuleReq ruleReq = BeanUtil.copyProperties(passRule, RuleReq.class);
+        ruleReq.setRecognizeTypes(Arrays.asList(passRule.getRecognizeType().split(",")));
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("ruleId", id);
+        List<RuleDeviceSummary> ruleDeviceSummaries = this.ruleDeviceService.listByMap(columnMap);
+        List<RulePersonSummary> rulePersonSummaries = this.rulePersonService.listByMap(columnMap);
+        List<RuleTimeSummary> ruleTimeSummaries = this.ruleTimeService.listByMap(columnMap);
+        ruleReq.setRuleDevices(copyProperties(RuleDeviceReq.class, ruleDeviceSummaries));
+        ruleReq.setRulePersons(StreamUtils.stream(rulePersonSummaries).map(RulePersonSummary::getPersonId).collect(Collectors.toList()));
+        ruleReq.setPassTimeRules(copyProperties(RuleTimeReq.class, ruleTimeSummaries));
+        return ruleReq;
+
+    }
+
+    private <Target, Source> List<Target> copyProperties(Class<Target> tClass, List<Source> sourceList) {
+        return StreamUtils.stream(sourceList)
+                .map(item -> BeanUtil.copyProperties(item, tClass))
+                .collect(Collectors.toList());
+    }
 }

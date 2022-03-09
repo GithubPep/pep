@@ -1,8 +1,10 @@
 package com.example.pep.iot;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.id.NanoId;
+import cn.hutool.core.util.IdUtil;
 import com.example.pep.iot.utils.StreamUtils;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -12,7 +14,9 @@ import net.jodah.expiringmap.ExpiringMap;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +29,12 @@ class PepIotApplicationTests {
     void contextLoads() {
         String s = NanoId.randomNanoId(20);
         log.info("s:{}", s);
+    }
+
+    @Test
+    public void testDateUtils() {
+        String format = DateUtil.format(new Date(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+        log.info("format:{}", format);
     }
 
     @Test
@@ -65,6 +75,12 @@ class PepIotApplicationTests {
         File file = FileUtil.file("/Users/pep/Desktop/screen.png");
         String type = FileTypeUtil.getType(file);
         log.info("type:{}", type);
+    }
+
+    @Test
+    public void testSnow() {
+        String idStr = IdUtil.getSnowflakeNextIdStr();
+        log.info("idStr:{}", idStr);
     }
 
 

@@ -15,3 +15,12 @@ logging:
     com.example.pep.iot.business: debug
     com.example.pep.iot.emq.mapper: debug
 
+mybatis-plus:
+  global-config:
+    db-config:
+      # 全局逻辑删除的实体字段名
+      logic-delete-field: isDeleted
+      # 逻辑已删除值(默认为 true)
+      logic-delete-value: true
+      # 逻辑未删除值(默认为 false)
+      logic-not-delete-value: false

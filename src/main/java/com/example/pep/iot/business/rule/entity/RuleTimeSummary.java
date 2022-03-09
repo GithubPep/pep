@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @TableName(value = "rule_time_summary")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class RuleTimeSummary extends BaseEntity {
+public class  RuleTimeSummary extends BaseEntity {
 
     @TableField(value = "timeRuleName")
     private String timeRuleName;

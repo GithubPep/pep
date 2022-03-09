@@ -34,7 +34,7 @@ public class DeviceRegister implements InitializingBean {
     private DeviceRegisterService deviceRegisterService;
 
     @Override
-    public void afterPropertiesSet()  {
+    public void afterPropertiesSet() {
         this.deviceRegister();
     }
 

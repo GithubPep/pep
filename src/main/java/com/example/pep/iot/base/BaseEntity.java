@@ -1,8 +1,6 @@
 package com.example.pep.iot.base;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -36,18 +34,19 @@ public class BaseEntity {
     /**
      * 创建时间
      */
-    @TableField(value = "createTime")
+    @TableField(value = "createTime", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @TableField(value = "updateTime")
+    @TableField(value = "updateTime", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     /**
      * 逻辑删除
      */
+    @TableLogic
     @TableField(value = "isDeleted")
     private Boolean isDeleted = false;
 

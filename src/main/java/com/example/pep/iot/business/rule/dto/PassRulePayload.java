@@ -1,6 +1,7 @@
 package com.example.pep.iot.business.rule.dto;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @since 2022-03-02 2:50 PM
  */
 @Data
+@Accessors(chain = true)
 public class PassRulePayload {
 
     private String deviceCode;
@@ -19,5 +21,5 @@ public class PassRulePayload {
 
     private List<PassRuleDto> saveRules;
 
-    private List<Object> delRules;
+    private List<String> delRules;
 }
