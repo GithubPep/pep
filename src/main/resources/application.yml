@@ -1,4 +1,8 @@
 spring:
+
+  main:
+    allow-bean-definition-overriding: true
+
   application:
     name: pep-iot
   profiles:
@@ -14,6 +18,8 @@ logging:
     root: info
     com.example.pep.iot.business: debug
     com.example.pep.iot.emq.mapper: debug
+    io.lettuce.core.protocol: info
+    
 
 mybatis-plus:
   global-config:
@@ -24,3 +30,4 @@ mybatis-plus:
       logic-delete-value: true
       # 逻辑未删除值(默认为 false)
       logic-not-delete-value: false
+

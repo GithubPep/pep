@@ -1,4 +1,4 @@
-package com.example.pep.iot.config;
+package com.example.pep.iot.config.mybatis;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;

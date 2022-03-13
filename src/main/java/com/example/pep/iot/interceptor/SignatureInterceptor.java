@@ -34,26 +34,28 @@ public class SignatureInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        //todo check login ? by token ...
-
-        String accessKey = "";
-        String secretKey = "";
-        String requestBody = readParams(request);
-        HashMap<String, String> params = JSON.parseObject(Objects.requireNonNull(requestBody), new TypeReference<HashMap<String, String>>() {
-        });
-        String sign = request.getHeader(Consistent.Headers.SIGNATURE);
-        String timestamp = request.getHeader(Consistent.Headers.TIMESTAMP);
-        String brand = request.getHeader(Consistent.Headers.BRAND);
-        if (StrUtil.hasBlank(sign, brand, timestamp)) {
-            throw new BizException(ResultEnum.SIGNATURE_ERROR, "签名参数缺少");
-        }
-        //check timestamp
-        if (System.currentTimeMillis() - Long.parseLong(timestamp) > 60 * 30 * 1000) {
-            throw new BizException(ResultEnum.SIGNATURE_ERROR, "请求时间戳已过期");
-        }
-        //check sign
-        if (!sign.equalsIgnoreCase(CertificateUtils.createSign(params, accessKey, secretKey, timestamp))) {
-            throw new BizException(ResultEnum.SIGNATURE_ERROR);
+        String servletPath = request.getServletPath();
+        if (StrUtil.isNotBlank(servletPath) && servletPath.startsWith("/s/")) {
+            //todo check login ? by token ...
+            String accessKey = "";
+            String secretKey = "";
+            String requestBody = readParams(request);
+            HashMap<String, String> params = JSON.parseObject(Objects.requireNonNull(requestBody), new TypeReference<HashMap<String, String>>() {
+            });
+            String sign = request.getHeader(Consistent.Headers.SIGNATURE);
+            String timestamp = request.getHeader(Consistent.Headers.TIMESTAMP);
+            String brand = request.getHeader(Consistent.Headers.BRAND);
+            if (StrUtil.hasBlank(sign, brand, timestamp)) {
+                throw new BizException(ResultEnum.SIGNATURE_ERROR, "签名参数缺少");
+            }
+            //check timestamp
+            if (System.currentTimeMillis() - Long.parseLong(timestamp) > 60 * 30 * 1000) {
+                throw new BizException(ResultEnum.SIGNATURE_ERROR, "请求时间戳已过期");
+            }
+            //check sign
+            if (!sign.equalsIgnoreCase(CertificateUtils.createSign(params, accessKey, secretKey, timestamp))) {
+                throw new BizException(ResultEnum.SIGNATURE_ERROR);
+            }
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }

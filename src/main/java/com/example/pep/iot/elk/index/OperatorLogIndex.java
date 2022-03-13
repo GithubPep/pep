@@ -1,6 +1,5 @@
 package com.example.pep.iot.elk.index;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
