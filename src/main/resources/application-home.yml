@@ -1,0 +1,52 @@
+#开发配置
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://192.168.124.6:3306/pep-iot
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    continue-on-error: true
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: 192.168.124.6:9200
+  elasticsearch:
+    rest:
+      uris: 192.168.124.6:9200
+  redis:
+    database: 0
+    host: 192.168.124.6
+logging:
+  file:
+    path:
+
+#  kafka:
+#    bootstrap-servers: 192.168.125.20:9092
+#    listener:
+#      type: batch
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    consumer:
+#      group-id: default
+#      enable-auto-commit: true
+#      auto-commit-interval: 5s
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+
+#pep:
+#  emq:
+#    username: admin
+#    password: public
+#    http-url: http://192.168.124.6:18083
+#    client-auth-url: /api/v3/auth_clientid
+#    keepAlive: 60
+#    mqtt:
+#      # mqtt://
+#      mqttUrl: 192.168.124.6
+#      port: 1883
+
+

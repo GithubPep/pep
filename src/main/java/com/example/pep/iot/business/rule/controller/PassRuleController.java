@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -28,7 +27,7 @@ public class PassRuleController {
     private final PublishService publishService;
 
     @PostMapping("/add")
-    public ResultVO<Void> addRule(@RequestBody  @Validated(value = ValidGroup.ValidAdd.class) RuleReq ruleReq) {
+    public ResultVO<Void> addRule(@RequestBody @Validated(value = ValidGroup.ValidAdd.class) RuleReq ruleReq) {
         passRuleService.addRule(ruleReq);
         return ResultVO.ok();
     }

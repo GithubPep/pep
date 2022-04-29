@@ -9,11 +9,13 @@ import com.example.pep.iot.mqtt.MqttConnect;
 import com.example.pep.iot.mqtt.MqttProperties;
 import com.example.pep.iot.utils.SystemUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import java.util.Arrays;
 
@@ -35,7 +37,7 @@ public class DeviceRegister implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        this.deviceRegister();
+//        this.deviceRegister();
     }
 
     @Transactional
@@ -56,6 +58,15 @@ public class DeviceRegister implements InitializingBean {
         mqttProperties.setHost("tcp://" + deviceMQTTConnection.getIp() + ":" + deviceMQTTConnection.getPort());
         MqttConnect.connect(mqttProperties);
         log.info("device:{}register res:\n{}", SystemUtil.DEVICE_CODE, JSONObject.toJSONString(response, SerializerFeature.PrettyFormat));
+    }
+
+    @PreDestroy
+    public void destroy() {
+        try {
+            MqttConnect.mqttClient.disconnect();
+        } catch (MqttException e) {
+            log.error("mqtt destroy error", e);
+        }
     }
 
 

@@ -42,6 +42,14 @@ public class ResultVO<T> {
         return build(ResultEnum.SUCCESS, data);
     }
 
+    public static <E> ResultVO<E> ok(E data, String msg) {
+        return build(ResultEnum.SUCCESS.getCode(), msg, data);
+    }
+
+    public static <E> ResultVO<E> queryOk(E data) {
+        return build(ResultEnum.QUERY_SUCCESS, data);
+    }
+
     public static <E> ResultVO<E> ok(Integer code, String message) {
         return code == null ? build(ResultEnum.SUCCESS.getCode(), message, null) : build(code, message, null);
     }

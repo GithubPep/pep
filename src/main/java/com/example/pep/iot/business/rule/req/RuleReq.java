@@ -2,7 +2,6 @@ package com.example.pep.iot.business.rule.req;
 
 import com.example.pep.iot.base.ValidGroup;
 import lombok.Data;
-import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;

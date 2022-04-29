@@ -1,16 +1,22 @@
 spring:
 
+  jackson:
+    # 日期返回格式
+    date-format: yyyy-MM-dd HH:mm:ss
+    # 格林威治标准时间 +8 中国地区
+    time-zone: GMT+8
   main:
     allow-bean-definition-overriding: true
 
   application:
     name: pep-iot
   profiles:
-    active: ${env:dev}
+    active: ${env:home}
 server:
   port: 6969
   servlet:
     context-path: /pep
+
 
 logging:
   #  config: classpath:logback-spring.xml
@@ -19,7 +25,7 @@ logging:
     com.example.pep.iot.business: debug
     com.example.pep.iot.emq.mapper: debug
     io.lettuce.core.protocol: info
-    
+
 
 mybatis-plus:
   global-config:

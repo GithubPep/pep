@@ -1,11 +1,7 @@
 package com.example.pep.iot;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.core.KafkaTemplate;
-
-import javax.annotation.Resource;
 
 /**
  * @author LiuGang
@@ -16,11 +12,11 @@ import javax.annotation.Resource;
 public class KafkaTest {
 
 
-    @Resource
-    private KafkaTemplate<String, Object> kafkaTemplate;
-
-    @Test
-    public void sendMsg() {
-        kafkaTemplate.send("first-topic", "hello kafka");
-    }
+//    @Resource
+//    private KafkaTemplate<String, Object> kafkaTemplate;
+//
+//    @Test
+//    public void sendMsg() {
+//        kafkaTemplate.send("first-topic", "hello kafka");
+//    }
 }

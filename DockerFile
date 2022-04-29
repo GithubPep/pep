@@ -1,0 +1,5 @@
+
+FROM openjdk:8-jdk-slim
+LABEL maintainer=pep
+COPY  target/*.jar /app.jar
+ENTRYPOINT ["Java","-jar","/app.jar"]

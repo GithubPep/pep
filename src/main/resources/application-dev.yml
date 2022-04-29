@@ -2,43 +2,50 @@
 spring:
   datasource:
     username: root
-    password: 123456
-    url: jdbc:mysql://localhost:3366/pep-iot
+    password: moyu_5419..
+    url: jdbc:mysql://www.pepgroup.top:23307/pep-iot
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
     continue-on-error: true
   elasticsearch:
     rest:
-      uris: localhost:9200
+      uris: www.pepgroup.top:19200
   redis:
-    database: 0
-    host: localhost
-
-  kafka:
-    bootstrap-servers: localhost:9092
-    listener:
-      type: batch
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    consumer:
-      group-id: default
-      enable-auto-commit: true
-      auto-commit-interval: 5s
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    cluster: #集群配置
+      nodes:
+        - www.pepgroup.top:16379
+        - www.pepgroup.top:16380
+        - www.pepgroup.top:16381
+        - www.pepgroup.top:16382
+        - www.pepgroup.top:16383
+        - www.pepgroup.top:16384
 
 
-pep:
-  emq:
-    username: admin
-    password: public
-    http-url: http://localhost:18083
-    client-auth-url: /api/v3/auth_clientid
-    keepAlive: 60
-    mqtt:
-      # mqtt://
-      mqttUrl: localhost
-      port: 1883
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    listener:
+#      type: batch
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    consumer:
+#      group-id: default
+#      enable-auto-commit: true
+#      auto-commit-interval: 5s
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+
+#pep:
+#  emq:
+#    username: admin
+#    password: public
+#    http-url: http://www.pepgroup.top:18083
+#    client-auth-url: /api/v3/auth_clientid
+#    keepAlive: 60
+#    mqtt:
+#      # mqtt://
+#      mqttUrl: www.pepgroup.top:18083
+#      port: 1883
 
 

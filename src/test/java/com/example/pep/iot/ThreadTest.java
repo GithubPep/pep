@@ -1,5 +1,7 @@
 package com.example.pep.iot;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Executors;
@@ -16,8 +18,8 @@ public class ThreadTest {
 
     public static void main(String[] args) throws InterruptedException {
 
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(3);
-        log.info("start");
+        DateTime parse = DateUtil.parse("2022-04-19 09:24:13");
+        System.out.println(parse.getTime());
 
 
     }

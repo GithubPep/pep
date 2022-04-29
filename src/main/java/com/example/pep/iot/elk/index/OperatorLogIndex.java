@@ -18,7 +18,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Data
 @Accessors(chain = true)
 @RequiredArgsConstructor
-@Document(indexName = OperatorLogIndex.LogIndexName, type = OperatorLogIndex.LogIndexName, shards = 1, replicas = 0)
+@Document(indexName = OperatorLogIndex.LogIndexName, shards = 1, replicas = 0)
 public class OperatorLogIndex {
 
     public final static String LogIndexName = "operator_log_index";

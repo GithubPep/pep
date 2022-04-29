@@ -10,6 +10,8 @@ public enum ResultEnum {
     PARAM_ERROR(-1, "参数异常"),
     SERVER_ERROR(-2, "业务异常"),
     SIGNATURE_ERROR(-3, "签名异常"),
+    LOGIN_SIGN_ERROR(-4, "账号或者密码错误"),
+    TOKEN_ERROR(-5, "没有token或者token失效"),
     FAILED(-500, "服务发生未知异常,请联系系统管理员");
 
     private final Integer code;
